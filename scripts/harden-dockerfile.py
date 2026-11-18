@@ -120,6 +120,9 @@ def main(src, dst):
                     'LABEL org.opencontainers.image.version=$HARDENED_VERSION \\\n'
                     '    org.backrest-hardened.source=$HARDENED_SOURCE \\\n'
                     '    org.backrest-hardened.upstream-version=$BACKREST_VERSION\n\n'
+                    '# Upstream\'s image has no health check; the web UI must answer.\n'
+                    'HEALTHCHECK --interval=30s --timeout=5s --start-period=30s --retries=3 \\\n'
+                    '  CMD curl -fsS -o /dev/null http://127.0.0.1:9898/ || exit 1\n\n'
                     r'\1', "labels")
 
     with open(dst, "w") as f:
